@@ -1,0 +1,52 @@
+local cjson = require "cjson"
+local redis = require "resty.redis"
+local redis_cli = redis:new()
+local redis_key = ngx.unescape_uri(ngx.var.key)
+local stripped_key = string.gsub(redis_key, '[%(%)%.%,]', '')
+
+-- connect to redis server
+local ok, err = redis_cli:connect("127.0.0.1", 6379)
+if not ok then
+    ngx.log("failed to connect: ", err)
+    return ngx.exit(ngx.HTTP_INTERNAL_SERVER_ERROR)
+end
+
+function main()
+  --[[  
+    local result = retrieve(redis_key)
+
+    if #result == 0 then
+        ngx.exit(ngx.HTTP_NOT_FOUND)
+    end
+    ngx.say("[" .. table.concat(result, ", ") .. "]")
+]]
+  
+    -- read redis using input key
+    local res, err = redis_cli:get(redis_key)
+    if (not res) or (res == ngx.null) then
+        -- read redis using stripped key: ABC (SDN), BHD. -> ABC SDN BHD
+        res, err = redis_cli:get(stripped_key)
+        if (not res) or (res == ngx.null) then 
+            return ngx.exit(ngx.HTTP_NOT_FOUND)
+        end
+    end
+    ngx.say(res)
+
+    return ngx.exit(ngx.HTTP_OK)
+end
+
+--[[
+function retrieve(redis_key) 
+    local result = {}
+    local keys = ngx.location.capture("/keys/" .. "*" .. string.upper(redis_key) .. "*")
+    for i,v in ipairs(cjson.decode(keys.body)) do
+        local res, err = redis_cli:get(v)
+        if (not res) or (res == ngx.null) then
+            return ngx.exit(ngx.HTTP_INTERNAL_SERVER_ERROR)
+        end
+        table.insert(result, res)
+    end
+    return result
+end
+]]
+main()
