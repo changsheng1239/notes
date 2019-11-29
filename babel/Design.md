@@ -31,6 +31,7 @@ context  varchar (UTF8)  - unique
 original varchar (UTF8)
 ```
 When developer update new context:
+
 | DB context | Application Context | Action |
 |------------|---------------------|--------|
 | -          | Yes                 | Insert |
