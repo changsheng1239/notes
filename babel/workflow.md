@@ -13,12 +13,12 @@
 ---
 ### Export from Sisulizer to a text file:
 ```
-slmake export z:\core-export.txt -format:1 -lang:`zh;ms;id;lo;my;th;km;ar-AE;zh.tra -escape:1 -readonly:false -nobom sql-core.slp 
+slmake export z:\core-export.txt -format:1 -lang:zh;ms;id;lo;my;th;km;ar-AE;zh.tra -escape:1 -readonly:false -nobom sql-core.slp 
 ```
 
 ### Import into MariaDB from text file:
 ```sql
-LOAD DATA LOCAL INFILE 'translation.txt'
+LOAD DATA LOCAL INFILE 'core-export.txt'
 INTO TABLE context
 FIELDS TERMINATED BY '\t'
 LINES TERMINATED BY '\r\n'
@@ -27,7 +27,7 @@ LINES TERMINATED BY '\r\n'
 
 ### Import from a text file into Sisulizer:
 ```
-slmake import r:\core-zh-cn.txt -tmarked:2 -textdef:Definition.sli -method:1 -overwrite:3 sql-core.slp -lang:zh;ms;vi;id;lo;ar-ae;th;mo;mo-at;my;km
+slmake import z:\core-export.txt -tmarked:2 -textdef:Definition.sli -method:1 -overwrite:3 sql-core.slp -lang:zh;ms;id;lo;my;th;km;ar-AE;zh.tra
 ``` 
 
 **Definition.sli:**
