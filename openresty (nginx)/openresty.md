@@ -58,3 +58,20 @@ http {
     include ../conf.d/*.conf;
 }
 ```
+
+## Setup alias as *nginx* 
+edit `~/.bashrc` and add
+```bash
+alias nginx=openresty
+```
+
+edit `/lib/systemd/system/openresty.service` and add
+```
+[Install]
+Alias=nginx.service
+```
+Enable the service
+```
+systemctl enable openresty
+systemctl restart openresty
+```
