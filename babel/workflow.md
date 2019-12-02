@@ -26,8 +26,9 @@ LINES TERMINATED BY '\r\n'
 ```
 
 ### Import from a text file into Sisulizer:
+> Matched by Context, Always overwrite
 ```
-slmake import z:\core-export.txt -tmarked:2 -textdef:Definition.sli -method:1 -overwrite:3 sql-core.slp -lang:zh;ms;id;lo;my;th;km;ar-AE;zh.tra
+slmake import z:\core-export.txt -tmarked:2 -textdef:z:\Definition.sli -method:0 -overwrite:3 -lang:zh;ms;id;lo;my;th;km;ar-AE;zh.tra sql-core.slp
 ``` 
 
 **Definition.sli:**
@@ -37,6 +38,13 @@ slmake import z:\core-export.txt -tmarked:2 -textdef:Definition.sli -method:1 -o
   <item type="ctContext" after="\t"/>
   <item type="ctOriginal" after="\t" escape="seCpp"/>
   <item type="ctText" after="\t" escape="seCpp" language="zh"/>
+  <item type="ctText" after="\t" escape="seCpp" language="ms"/>
+  <item type="ctText" after="\t" escape="seCpp" language="id"/>
+  <item type="ctText" after="\t" escape="seCpp" language="lo"/>
+  <item type="ctText" after="\t" escape="seCpp" language="my"/>
+  <item type="ctText" after="\t" escape="seCpp" language="th"/>
+  <item type="ctText" after="\t" escape="seCpp" language="km"/>
+  <item type="ctText" after="\t" escape="seCpp" language="ar-AE"/>
   <item type="ctText" after="\r\n|\z" escape="seCpp" language="zh.tra"/>
 </textdefinition>
 ```

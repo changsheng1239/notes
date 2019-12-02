@@ -3,5 +3,12 @@
   <item type="ctContext" after="\t"/>
   <item type="ctOriginal" after="\t" escape="seCpp"/>
   <item type="ctText" after="\t" escape="seCpp" language="zh"/>
+  <item type="ctText" after="\t" escape="seCpp" language="ms"/>
+  <item type="ctText" after="\t" escape="seCpp" language="id"/>
+  <item type="ctText" after="\t" escape="seCpp" language="lo"/>
+  <item type="ctText" after="\t" escape="seCpp" language="my"/>
+  <item type="ctText" after="\t" escape="seCpp" language="th"/>
+  <item type="ctText" after="\t" escape="seCpp" language="km"/>
+  <item type="ctText" after="\t" escape="seCpp" language="ar-AE"/>
   <item type="ctText" after="\r\n|\z" escape="seCpp" language="zh.tra"/>
 </textdefinition>
