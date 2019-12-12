@@ -6,9 +6,13 @@
 ## Overall Workflow
 1. Export from sisulizer into tab separated text file including all languages. 
 2. Import into database.
-3. Make changes to translation through webapp <-> api <-> database.
-4. Import into sisulizer (through database or text file).
-5. Build .bpl files.
+3. Make changes to translation through `webapp` <-> `api` <-> `database`.
+4. Export a txt file with format from db with format 
+  
+    `[Context\tOriginal\tzh\t]`
+
+5. Import into sisulizer (cli unable to import from db).
+6. Build .bpl files.
 
 ---
 ### Export from Sisulizer to a text file:
