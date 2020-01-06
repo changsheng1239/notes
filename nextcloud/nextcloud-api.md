@@ -1,21 +1,27 @@
 # Nextcloud API 
  
 ## File Manipulation using http/1.1 request
-**FileDrop url:**  
+**FileDrop/Shared Folder url:**  
 > `https://drive.dev.sql.com.my/s/qBHMPg9JSaWJBrX`
 
+### Upload to FileDrop/Shared Folder using http request 
 *If the link is **password protected**, include the password in basic auth (-u username:password).*
-### Upload to FileDrop using http request 
 ```shell
-curl -T files.txt -u "qBHMPg9JSaWJBrX:" -H "X-Requested-With:XMLHttpRequest" https://drive.dev.sql.com.my/public.php/webdav/files.txt
+curl -T files.txt -u "qBHMPg9JSaWJBrX:" -H "X-Requested-With:XMLHttpRequest" https://drive.dev.sql.com.my/public.php/webdav/
+```
+
+### Download from Shared Folder using http request
+```shell
+curl https://drive.dev.sql.com.my/s/qBHMPg9JSaWJBrX/download?path=/filename -o filename
 ```
 
 ### Retrieve file list
+> cUJITVBnOUpTYVdKQnJYOnBhc3N3b3Jk = base64encode(qBHMPg9JSaWJBrX:)
 ```shell
 curl -X PROPFIND -H "Authorization: Basic cUJITVBnOUpTYVdKQnJYOnBhc3N3b3Jk" -H "X-Requested-With:XMLHttpRequest" https://drive.dev.sql.com.my/public.php/webdav/
 ```
 
---- 
+---
 ## Webdav API
 ## Testing with curl
 ```shell
