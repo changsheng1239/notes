@@ -118,3 +118,21 @@ div#security-password {
 }
 ```
 **Extra: Block `/remote.php/webdav` access in webserver to completely deny user webdav access**
+
+---
+## Multiple Instances
+
+**1. Connect to same database.**
+
+**2. Three folders are required to be identical:**
+```
+1. config
+2. themes
+3. data (nfs mount)
+```
+
+## Custom Apps
+```
+1. Custom CSS
+2. Social Login
+```

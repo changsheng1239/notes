@@ -245,3 +245,7 @@ Docker Command
 #### List task associated with an app
     docker service ps <service>
 ---
+### Nginx
+#### Reload nginx
+    docker kill -s HUP <container>
+---
