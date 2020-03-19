@@ -85,7 +85,6 @@ nano /etc/nginx/conf.d/nextcloud.conf
 ],
 ```
 
-
 ### Custom CSS
 ```css
 /* 
@@ -131,8 +130,22 @@ div#security-password {
 3. data (nfs mount)
 ```
 
-## Custom Apps
+## Apps to be installed
 ```
-1. Custom CSS
-2. Social Login
+1. Custom CSS   (theming_customcss)
+2. Social Login (sociallogin)
+3. ONLYOFFICE (onlyoffice)
+4. Impersonate (impersonate)
+```
+
+## Apps to be disabled
+```
+1. First Run Wizard (firstrunwizard)
+2. Privacy (privacy)
+```
+
+## Apps to be enabled
+```
+1. External Storage Support (files_external)
+2. LDAP user and group backend (user_ldap)
 ```

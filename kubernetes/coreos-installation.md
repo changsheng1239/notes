@@ -8,7 +8,7 @@ hostnamectl set-hostname <hostname>
 Edit **/etc/hosts** and replace *localhost* as *hostname*
 
 ## Install CNI plugins (required for most pod network):
-```bash
+```bash  
 CNI_VERSION="v0.8.2"
 mkdir -p /opt/cni/bin
 curl -L "https://github.com/containernetworking/plugins/releases/download/${CNI_VERSION}/cni-plugins-linux-amd64-${CNI_VERSION}.tgz" | tar -C /opt/cni/bin -xz

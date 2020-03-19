@@ -10,15 +10,25 @@
 curl -T files.txt -u "qBHMPg9JSaWJBrX:" -H "X-Requested-With:XMLHttpRequest" https://drive.dev.sql.com.my/public.php/webdav/
 ```
 
+### Retrieve file list (require folder id from share link and base64encode)
+> cUJITVBnOUpTYVdKQnJYOnBhc3N3b3Jk = base64encode(qBHMPg9JSaWJBrX:)
+```shell
+curl -X PROPFIND -H "Authorization: Basic cUJITVBnOUpTYVdKQnJYOnBhc3N3b3Jk" -H "X-Requested-With:XMLHttpRequest" https://drive.dev.sql.com.my/public.php/webdav/
+```
+
 ### Download from Shared Folder using http request (require filename and share link)
 ```shell
 curl https://drive.dev.sql.com.my/s/qBHMPg9JSaWJBrX/download?path=/filename -o filename
 ```
 
-### Retrieve file list (require folder id from share link and base64encode)
-> cUJITVBnOUpTYVdKQnJYOnBhc3N3b3Jk = base64encode(qBHMPg9JSaWJBrX:)
+### Delete a file in Shared Folder 
 ```shell
-curl -X PROPFIND -H "Authorization: Basic cUJITVBnOUpTYVdKQnJYOnBhc3N3b3Jk" -H "X-Requested-With:XMLHttpRequest" https://drive.dev.sql.com.my/public.php/webdav/
+curl -XDELETE -u "qBHMPg9JSaWJBrX:" -H "X-Requested-With-XMLHttpRequest" https://drive.dev.sql.com.my/public.php/webdav/test/load-balancer-example.yaml
+```
+
+### Move a file in Shared Folder
+```shell
+curl -XMOVE -u "qBHMPg9JSaWJBrX:" -H "X-Requested-With:XMLHttpRequest" -H "destination:https://drive.dev.sql.com.my/public.php/webdav/test/files.txt" https://drive.dev.sql.com.my/public.php/webdav/files.txt
 ```
 
 ---
