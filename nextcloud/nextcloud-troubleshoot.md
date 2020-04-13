@@ -10,3 +10,6 @@
 **lib/private/Http/Client.php |** `line 66` 
 > change the timeout from 30 to 90
 
+### Download stop at 1GB
+**nginx.conf** 
+> fastcgi_max_temp_file_size  0; 
