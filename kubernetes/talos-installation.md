@@ -69,6 +69,8 @@ Add a new entry to boot.ipxe
       "talos.platform=metal",
       "talos.config=http://matchbox.talos.dev/assets/init.yaml"
     ]
+  }
+}
 ```
 
 **/var/lib/matchbox/profiles/controlplane.json**
