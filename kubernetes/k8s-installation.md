@@ -60,9 +60,28 @@ mkdir -p /etc/containerd && \
 containerd config default > /etc/containerd/config.toml && \
 systemctl restart containerd
 ```
-6. Install `Calico network plugin`
+
+To use systemd as cgroup driver for `containerd`, edit `/etc/containerd/config.toml`:
+```
+plugins.cri.systemd_cgroup = true
+```
+
+
+---
+### Init cluster
+*if using systemd as cgroup driver*
+**kubelet-config.yaml**
+```
+apiVersion: kubelet.config.k8s.io/v1beta1
+kind: KubeletConfiguration
+cgroupDriver: systemd
+```
+1. Run `kubeadm init`
+```
+kubeadm init --config kubelet-config.yaml --control-plane-endpoint "10.10.1.201:6443" --upload-certs --pod-network-cidr=172.16.0.0/16
+```
+2. Install `Calico network plugin`
 ```
 kubectl apply -f https://docs.projectcalico.org/v3.14/manifests/calico.yaml
 ```
-
-
+3. Join the rest of master nodes and worker nodes using commands from step 1. 
