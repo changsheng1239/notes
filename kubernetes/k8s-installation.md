@@ -47,7 +47,7 @@ sudo apt-get update && \
 sudo apt-get install -y kubelet kubeadm kubectl && \
 sudo apt-mark hold kubelet kubeadm kubectl 
 ```
-5. Install `containerd`
+5. Install [containerd](https://kubernetes.io/docs/setup/production-environment/container-runtimes/#containerd)
 ```
 apt-get update && apt-get install -y apt-transport-https ca-certificates curl software-properties-common gnupg2 && \
 curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add - && \
