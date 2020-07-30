@@ -1,0 +1,132 @@
+CREATE STREAM guacamole_connection (
+	payload STRUCT<
+		after STRUCT <
+			connection_id BIGINT,
+			connection_name VARCHAR
+		>
+	>
+) WITH (
+	KAFKA_TOPIC='guacamole_private.sql_connect_private.guacamole_connection',
+	VALUE_FORMAT='JSON'
+);
+
+CREATE STREAM guacamole_connection_flatten AS
+	SELECT 	PAYLOAD->AFTER->CONNECTION_ID AS CONNECTION_ID,
+		PAYLOAD->AFTER->CONNECTION_NAME AS CONNECTION_NAME
+	FROM GUACAMOLE_CONNECTION;
+
+
+CREATE TABLE guacamole_connection_table (
+    payload STRUCT<
+		after STRUCT <
+			connection_id BIGINT,
+			connection_name VARCHAR
+		>
+	> PRIMARY KEY
+) WITH (
+    KAFKA_TOPIC='guacamole_private.sql_connect_private.guacamole_connection',
+	VALUE_FORMAT='JSON'
+);
+
+CREATE TABLE guacamole_connection_table AS
+	SELECT 	payload->after->connection_id as id,
+		PAYLOAD->AFTER->CONNECTION_NAME as name,
+		COUNT(payload->after->connection_name) AS connection_sum
+	FROM guacamole_connection
+	GROUP BY payload->after->connection_id, payload->after->connection_name
+	EMIT CHANGES;
+===============================================
+CREATE STREAM guacamole_user (
+	payload STRUCT<
+		after STRUCT <
+			user_id BIGINT,
+			entity_id BIGINT,
+			email_address VARCHAR,
+			organization VARCHAR
+		>
+	>
+) WITH (
+	KAFKA_TOPIC='guacamole_private.sql_connect_private.guacamole_user',
+	VALUE_FORMAT='JSON'
+);
+
+
+CREATE STREAM guacamole_user_flatten AS
+	SELECT 	payload->after->user_id AS user_id,
+		payload->after->entity_id AS entity_id,
+		payload->after->email_address AS email_address,
+		payload->after->organization AS organization
+	FROM guacamole_user;
+================================================
+CREATE STREAM guacamole_entity (
+	payload STRUCT<
+		after STRUCT <
+			entity_id BIGINT,
+			name VARCHAR,
+			type VARCHAR
+		>
+	>
+) WITH (
+	KAFKA_TOPIC='guacamole_private.sql_connect_private.guacamole_entity',
+	VALUE_FORMAT='JSON'
+);
+
+
+CREATE STREAM guacamole_entity_flatten AS
+	SELECT 	payload->after->entity_id AS entity_id,
+		payload->after->name AS name,
+		payload->after->type AS type
+	FROM guacamole_entity;
+================================================
+CREATE STREAM guacamole_connection_permission (
+	payload STRUCT<
+		after STRUCT <
+			entity_id BIGINT,
+			connection_id BIGINT,
+			permission VARCHAR
+		>
+	>
+) WITH (
+	KAFKA_TOPIC='guacamole_private.sql_connect_private.guacamole_connection_permission',
+	VALUE_FORMAT='JSON'
+);
+
+
+CREATE STREAM guacamole_connection_permission_flatten AS
+	SELECT 	payload->after->entity_id AS entity_id,
+		payload->after->connection_id AS connection_id,
+		payload->after->permission AS permission
+	FROM guacamole_connection_permission;
+================================================
+CREATE STREAM guacamole_user_connection AS
+	SELECT  a.name, c.connection_name, c.connection_id
+	FROM guacamole_entity_flatten AS a
+	LEFT JOIN guacamole_connection_permission_flatten b WITHIN 5 DAYS ON a.entity_id=b.entity_id 
+	LEFT JOIN guacamole_connection_flatten c WITHIN 5 DAYS ON b.connection_id=c.connection_id 
+	WHERE a.type LIKE 'USER' AND b.permission LIKE 'READ';
+
+CREATE TABLE guacamole_user_connection AS
+	SELECT *
+	FROM guacamole_user_connection;
+
+CREATE TABLE guacamole_user_connection_count AS
+	SELECT name, count(*) AS total_connection
+	FROM guacamole_user_connection
+	GROUP BY name;
+================================================
+UNSET 'auto.offset.reset'='earliest';
+
+
+------------------------------------------------
+CREATE TABLE guacamole_connection (
+    connection_id INT PRIMARY KEY,
+    connection_name VARCHAR
+) WITH (
+    KAFKA_TOPIC='guacamole.sql_connect_private.guacamole_connection',
+    VALUE_FORMAT='JSON'
+);
+
+
+
+
+key: {"connection_id":1753}, value: {"connection_id":1753,"connection_name":"abc","parent_id":208,"protocol":"rdp","proxy_port":8822,"proxy_hostname":"abc.ddns","proxy_encryption_method":"SSL","max_connections":null,"max_connections_per_user":null,"connection_weight":null,"failover_only":0}

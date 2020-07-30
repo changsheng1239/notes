@@ -6,7 +6,20 @@ curl https://koala.sql.com.my/kubernetes/install | bash
 ```
 ### Run this on control plane 1
 ```
-kubeadm init --control-plane-endpoint "10.10.1.201:6443" --upload-certs --pod-network-cidr=172.16.0.0/16
+cat > /tmp/config.yaml << EOF
+apiVersion: kubeadm.k8s.io/v1beta2
+kind: ClusterConfiguration
+networking:
+  podSubnet: "172.16.0.0/16"
+controlPlaneEndpoint: "10.10.1.201:6443" 
+---
+apiVersion: kubelet.config.k8s.io/v1beta1
+kind: KubeletConfiguration
+cgroupDriver: systemd
+EOF
+```
+```
+kubeadm init --config /tmp/config.yaml --upload-certs
 ```
 ```
 kubectl apply -f https://docs.projectcalico.org/v3.14/manifests/calico.yaml
@@ -58,6 +71,7 @@ add-apt-repository \
 apt-get update && apt-get install -y containerd.io && \
 mkdir -p /etc/containerd && \
 containerd config default > /etc/containerd/config.toml && \
+sed -i -e '/systemd_cgroup/s/false/true/' /etc/containerd/config.toml && \
 systemctl restart containerd
 ```
 
@@ -70,15 +84,21 @@ plugins.cri.systemd_cgroup = true
 ---
 ### Init cluster
 *if using systemd as cgroup driver*
-**kubelet-config.yaml**
+**config.yaml**
 ```
+apiVersion: kubeadm.k8s.io/v1beta2
+kind: ClusterConfiguration
+networking:
+  podSubnet: "172.16.0.0/16"
+controlPlaneEndpoint: "10.10.1.201:6443" 
+---
 apiVersion: kubelet.config.k8s.io/v1beta1
 kind: KubeletConfiguration
 cgroupDriver: systemd
 ```
 1. Run `kubeadm init`
 ```
-kubeadm init --config kubelet-config.yaml --control-plane-endpoint "10.10.1.201:6443" --upload-certs --pod-network-cidr=172.16.0.0/16
+kubeadm init --config config.yaml --upload-certs 
 ```
 2. Install `Calico network plugin`
 ```

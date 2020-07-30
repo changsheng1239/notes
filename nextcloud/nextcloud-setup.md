@@ -77,7 +77,8 @@ nano /etc/nginx/conf.d/nextcloud.conf
 'skeletondirectory' => '',          /* Empty skeleton directory */
 'lost_password_link' => 'disabled', /* Disable Password Reset */
 'simpleSignUpLink.shown' => false,   /* Remove 'Get your own free account' in public share */
-'memcache.local' => '\OC\Memcache\Redis',
+'memcache.local' => '\OC\Memcache\APCu',
+'memcache.distributed' => '\OC\Memcache\Redis',
 'memcache.locking' => '\OC\Memcache\Redis',
 'redis' => [
     'host' => 'localhost',
@@ -128,6 +129,7 @@ div#security-password {
 1. config
 2. themes
 3. data (nfs mount)
+4. custom_apps
 ```
 
 ## Apps to be installed
@@ -148,4 +150,25 @@ div#security-password {
 ```
 1. External Storage Support (files_external)
 2. LDAP user and group backend (user_ldap)
+```
+---
+### php commands 
+```
+run_as "php /var/www/html/occ app:enable files_external"
+run_as "php /var/www/html/occ app:enable user_ldap"
+run_as "php /var/www/html/occ app:disable firstrunwizard"
+run_as "php /var/www/html/occ app:disable privacy"
+run_as "php /var/www/html/occ app:install impersonate"
+run_as "php /var/www/html/occ app:install sociallogin"
+run_as "php /var/www/html/occ app:install theming_customcss"
+run_as "php /var/www/html/occ app:install onlyoffice"
+
+run_as "php occ ldap:create-empty-config"
+run_as "php occ ldap:set-config s01 ldapBase 'dc=cs-debian-10,dc=lan,dc=sql,dc=com,dc=my'"
+run_as "php occ ldap:set-config s01 ldapBaseGroups 'dc=cs-debian-10,dc=lan,dc=sql,dc=com,dc=my'"
+run_as "php occ ldap:set-config s01 ldapBaseUsers 'dc=cs-debian-10,dc=lan,dc=sql,dc=com,dc=my'"
+run_as "php occ ldap:set-config s01 ldapHost 'cs-debian-10.lan.sql.com.my'"
+run_as "php occ ldap:set-config s01 ldapPort '389'"
+run_as "php occ ldap:set-config s01 ldapLoginFilter '(&(|(objectclass=inetOrgPerson))(uid=%uid))'"
+run_as "php occ ldap:test-config s01"
 ```
