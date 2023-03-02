@@ -1,15 +1,35 @@
-# Nextcloud Troubleshoot
+# Troubleshooting
 
-### App Store Timeout
-**3rdparty/guzzlehttp/guzzle/src/Handler/CurlFactory.php |** `line404`
-> increase 1000 to 10000
+## 1. App Store Timeout
 
-**lib/private/App/AppStore/Fetcher/Fetcher.php |** `line 98` 
-> change the timeout from 10 to 30 or 90
+Update the following files to extend the timeout of app store
 
-**lib/private/Http/Client.php |** `line 66` 
-> change the timeout from 30 to 90
+```
+3rdparty/guzzlehttp/guzzle/src/Handler/CurlFactory.php 
+line 404
 
-### Download stop at 1GB
-**nginx.conf** 
-> fastcgi_max_temp_file_size  0; 
+increase timeout from 1000 to 10000
+```
+
+```
+lib/private/App/AppStore/Fetcher/Fetcher.php
+line 98
+
+increase timeout from 10 to 30 or 90
+```
+
+```
+lib/private/Http/Client.php
+line 66
+
+increase timeout from 30 to 90
+```
+
+## 2. Download stop at 1GB
+
+Update `fast_cgi_max_temp_file_size`, default to `1G`
+
+```
+nginx.conf
+fastcgi_max_temp_file_size  0; 
+```
